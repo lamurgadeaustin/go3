@@ -24,6 +24,9 @@ jobs:
       image_name: ${{ fromJSON(steps.publish.outputs.metadata)['image.name'] }}
       short_sha_tag: ${{ steps.record_summary.outputs.short_sha_tag }}
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
       - name: Authenticate to Google Cloud
         # if: github.event_name != 'pull_request'
         uses: google-github-actions/auth@v2
@@ -32,9 +35,6 @@ jobs:
           workload_identity_provider: "${{ vars.WORKLOAD_IDENTITY_PROVIDER }}"
           service_account: "${{ vars.GHA_SERVICE_ACCOUNT_EMAIL }}"
           token_format: access_token
-
-      - name: Checkout Repository
-        uses: actions/checkout@v4
 
       - name: Set up Docker Buildx
         id: buildx
