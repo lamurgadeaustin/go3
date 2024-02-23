@@ -25,7 +25,8 @@ resource "google_project_service" "murga_o_matic" {
     "serviceusage.googleapis.com",
 
     # "secretmanager.googleapis.com", # direct usage
-    # "containerregistry.googleapis.com", # hosting cloudrun images
+    "containerregistry.googleapis.com", # hosting cloudrun images
+    "artifactregistry.googleapis.com", # needed for GCR
     # "run.googleapis.com",
     # "sqladmin.googleapis.com", # for connecting to sql from cloudrun?
     # "compute.googleapis.com", # Needed to edit Cloud SQL config via the console for some reason?
