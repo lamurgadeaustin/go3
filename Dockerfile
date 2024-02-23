@@ -1,30 +1,37 @@
-FROM python:3.11-slim
+FROM python:3.11-alpine as base
 
-ENV APP_HOME /app
-WORKDIR $APP_HOME
+ENV PYTHONFAULTHANDLER=1 \
+  PYTHONHASHSEED=random \
+  PYTHONUNBUFFERED=1
 
-# Removes output stream buffering, allowing for more efficient logging
-ENV PYTHONUNBUFFERED 1
+WORKDIR /app
 
-# Configure Poetry
-ENV POETRY_VERSION=1.5.1
-ENV POETRY_HOME=/opt/poetry
-ENV POETRY_VENV=/opt/poetry-venv
-ENV POETRY_CACHE_DIR=/opt/.cache
+FROM base as builder
 
-# Install poetry separated from system interpreter
-RUN python3 -m venv $POETRY_VENV \
-    && $POETRY_VENV/bin/pip install -U pip setuptools \
-    && $POETRY_VENV/bin/pip install poetry==${POETRY_VERSION}
+ENV PIP_DEFAULT_TIMEOUT=100 \
+  PIP_DISABLE_PIP_VERSION_CHECK=1 \
+  PIP_NO_CACHE_DIR=1 \
+  POETRY_VERSION=1.5.1
 
-# Add `poetry` to PATH
-ENV PATH="${PATH}:${POETRY_VENV}/bin"
+RUN apk add --no-cache gcc libffi-dev musl-dev postgresql-dev
+RUN pip install "poetry==$POETRY_VERSION"
+RUN python -m venv /venv
 
-# Install dependencies
-COPY poetry.lock pyproject.toml ./
-RUN poetry install
+COPY pyproject.toml poetry.lock ./
 
-# Copy local code to the container image.
+RUN poetry export -f requirements.txt | /venv/bin/pip install -r /dev/stdin
+
 COPY . .
 
-CMD [ "poetry", "run", "python", "manage.py", "runserver", "0.0.0.0:$PORT" ]
+RUN poetry build && /venv/bin/pip install dist/*.whl
+
+FROM base as final
+
+RUN apk add --no-cache libffi libpq
+
+COPY --from=builder /venv /venv
+
+# COPY docker-entrypoint.sh wsgi.py ./
+COPY docker-entrypoint.sh  ./
+
+CMD ["./docker-entrypoint.sh"]
