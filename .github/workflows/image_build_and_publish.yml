@@ -36,6 +36,7 @@ jobs:
           workload_identity_provider: "${{ vars.WORKLOAD_IDENTITY_PROVIDER }}"
           service_account: "${{ vars.GHA_SERVICE_ACCOUNT_EMAIL }}"
           token_format: access_token
+          access_token_scopes: "https://www.googleapis.com/auth/cloud-platform,https://www.googleapis.com/auth/devstorage.read_write"
 
       - name: Set up Docker Buildx
         id: buildx
