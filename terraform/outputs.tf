@@ -60,3 +60,7 @@ output "statics_bucket_id" {
 output "website_domain_name" {
   value = local.cloud_run_domain_name
 }
+
+output "domain_mapping_records" {
+  value = google_cloud_run_domain_mapping.omatic
+}
