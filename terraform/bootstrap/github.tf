@@ -22,7 +22,8 @@ module "github_oidc" {
   sa_mapping = {
     "github-deployer" = {
       sa_name   = google_service_account.github_deployer.name
-      attribute = "attribute.ref/refs/heads/jefwecan/first-look"
+      # attribute = "attribute.ref/refs/heads/jefwecan/first-look"
+      attribute = "attribute.repository/${var.github_repo}"
     }
   }
 }
