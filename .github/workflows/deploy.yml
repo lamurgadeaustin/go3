@@ -1,0 +1,73 @@
+name: Main Deployment Workflow
+run-name: "Deployment Run #${{ github.run_number }} (via @${{ github.actor }})"
+
+concurrency:
+  group: "deploy"
+  cancel-in-progress: false
+
+on:
+  push:
+    branches:
+      - main
+      - jeffwecan/first-pass # TODO: just for now... remove later :)
+  workflow_dispatch: {}
+
+jobs:
+  build_images:
+    name: Build Images
+    uses: ./.github/workflows/image_build_and_publish.yml
+
+  deploy-infra-and-services:
+    name: Deploy Infrastructure & Services
+    runs-on: ubuntu-latest
+    needs: [build_images]
+    # environment:
+    #   name: production
+    #   url: "https://gig-o.murga.app"
+    permissions:
+      contents: "read"
+      id-token: "write"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        id: auth
+        with:
+          workload_identity_provider: "${{ vars.WORKLOAD_IDENTITY_PROVIDER }}"
+          service_account: "${{ vars.GHA_SERVICE_ACCOUNT_EMAIL }}"
+          # access_token_scopes: "https://www.googleapis.com/auth/cloud-platform,https://www.googleapis.com/auth/sqlservice.admin"
+          token_format: access_token
+          access_token_lifetime: 1800s
+
+      - name: Utilize .terraform cache
+        uses: actions/cache@v4
+        with:
+          path: terraform/.terraform
+          key: ${{ hashFiles('terraform/.terraform.lock.hcl') }}
+
+      - name: Read .terraform-version
+        id: read_tf_version
+        run: echo "terraform_version=$(awk '/terraform/ {print $2;}' .tool-versions)" | tee --append "$GITHUB_OUTPUT"
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ steps.read_tf_version.outputs.terraform_version }}
+          terraform_wrapper: false
+
+      - name: Set website_image Terraform Variable (via GITHUB_ENV)
+        run: echo "TF_VAR_website_image=gcr.io/murga-o-matic/website:sha-${{ needs.build_images.outputs.short_sha_tag }}" | tee --append "$GITHUB_ENV"
+
+      - name: Terraform Init
+        working-directory: ./terraform
+        run: terraform init
+
+      - name: Terraform Plan
+        working-directory: ./terraform
+        run: terraform plan
+
+      - name: Terraform Apply
+        working-directory: ./terraform
+        run: terraform apply -auto-approve

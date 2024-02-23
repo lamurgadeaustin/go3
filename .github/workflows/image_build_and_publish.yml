@@ -1,8 +1,9 @@
 name: Build and Publish Image to GCR
 
 on:
-  pull_request:
-    branches: [main]
+  # TEMP: toggle back on after we stop deploying in our initial WIP branch PR
+  # pull_request:
+  #   branches: [main]
   workflow_call:
     outputs:
       image_name:
