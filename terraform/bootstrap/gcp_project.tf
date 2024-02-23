@@ -24,12 +24,15 @@ resource "google_project_service" "murga_o_matic" {
     # ... Error when reading or editing Project Service lv-digital-membership/iam.googleapis.com: ...
     "serviceusage.googleapis.com",
 
-    # "secretmanager.googleapis.com", # direct usage
     "containerregistry.googleapis.com", # hosting cloudrun images
     "artifactregistry.googleapis.com", # needed for GCR
-    # "run.googleapis.com",
+
+    "secretmanager.googleapis.com", # direct usage
+
+    "run.googleapis.com",
+    "compute.googleapis.com", # Needed to edit Cloud SQL config via the console for some reason?
+
     # "sqladmin.googleapis.com", # for connecting to sql from cloudrun?
-    # "compute.googleapis.com", # Needed to edit Cloud SQL config via the console for some reason?
 
     # "bigquery.googleapis.com",
     # APM and debugging thingers:

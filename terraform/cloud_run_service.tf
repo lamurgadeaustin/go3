@@ -4,7 +4,7 @@ locals {
   cloud_run_services = {
     "website" = {
       image                   = var.website_image
-      # service_account_name    = google_service_account.omatic["website"].email
+      service_account_name    = google_service_account.omatic["website"].email
       memory_mb               = "512Mi"
       min_scale               = "1"
       max_scale               = "1"
@@ -47,7 +47,7 @@ resource "google_cloud_run_service" "omatic" {
       annotations = {
         "autoscaling.knative.dev/minScale"         = each.value.min_scale
         "autoscaling.knative.dev/maxScale"         = each.value.max_scale
-        # "run.googleapis.com/cloudsql-instances"    = google_sql_database_instance.omatic.connection_name
+        "run.googleapis.com/cloudsql-instances"    = google_sql_database_instance.omatic.connection_name
         "run.googleapis.com/client-name"           = each.key
         "run.googleapis.com/execution-environment" = "gen2"
         "run.googleapis.com/launch-stage"          = "BETA"
@@ -55,7 +55,7 @@ resource "google_cloud_run_service" "omatic" {
     }
 
     spec {
-      # service_account_name = each.value.service_account_name
+      service_account_name = each.value.service_account_name
 
       timeout_seconds = each.value.timeout_seconds
 
@@ -82,25 +82,25 @@ resource "google_cloud_run_service" "omatic" {
         #   value = google_sql_database.database.name
         # }
 
-        # env {
-        #   name  = "OMATIC_BASE_URL"
-        #   value = local.cloud_run_domain_name
-        # }
+        env {
+          name  = "OMATIC_BASE_URL"
+          value = local.cloud_run_domain_name
+        }
 
-        # env {
-        #   name  = "GCS_BUCKET_ID"
-        #   value = google_storage_bucket.statics.name
-        # }
+        env {
+          name  = "GS_BUCKET_NAME"
+          value = google_storage_bucket.statics.name
+        }
 
-        # env {
-        #   name  = "GCLOUD_PROJECT"
-        #   value = var.gcp_project_id
-        # }
+        env {
+          name  = "GCLOUD_PROJECT"
+          value = var.gcp_project_id
+        }
 
-        # env {
-        #   name  = "LOG_LEVEL"
-        #   value = upper(var.app_log_level)
-        # }
+        env {
+          name  = "LOG_LEVEL"
+          value = upper(var.app_log_level)
+        }
 
         ports {
           name = "http1"

@@ -13,22 +13,23 @@
 #     ]
 #   )
 # }
-# output "postgres_connection_name" {
-#   value = google_sql_database_instance.omatic.connection_name
-# }
+
+output "postgres_connection_name" {
+  value = google_sql_database_instance.omatic.connection_name
+}
 
 # output "postgres_connection_url" {
 #   value     = local.postgres_connection_url
 #   sensitive = true
 # }
 
-# output "postgres_public_ip_address" {
-#   value = google_sql_database_instance.omatic.public_ip_address
-# }
+output "postgres_public_ip_address" {
+  value = google_sql_database_instance.omatic.public_ip_address
+}
 
-# output "postgres_database_name" {
-#   value = google_sql_database.database.name
-# }
+output "postgres_database_name" {
+  value = google_sql_database.database.name
+}
 
 # output "postgres_management_user_name" {
 #   value = google_sql_user.management.name
@@ -52,9 +53,9 @@
 #   sensitive = true
 # }
 
-# output "statics_bucket_id" {
-#   value = google_storage_bucket.statics.id
-# }
+output "statics_bucket_id" {
+  value = google_storage_bucket.statics.id
+}
 
 output "website_domain_name" {
   value = local.cloud_run_domain_name
