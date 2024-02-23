@@ -1,4 +1,4 @@
-output "github_deployer_service_account_email" {
+output "gha_service_account_email" {
   value = google_service_account.github_deployer.email
 }
 
