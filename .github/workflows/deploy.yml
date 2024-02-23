@@ -41,7 +41,7 @@ jobs:
         with:
           workload_identity_provider: "${{ vars.WORKLOAD_IDENTITY_PROVIDER }}"
           service_account: "${{ vars.GHA_SERVICE_ACCOUNT_EMAIL }}"
-          # access_token_scopes: "https://www.googleapis.com/auth/cloud-platform,https://www.googleapis.com/auth/sqlservice.admin"
+          access_token_scopes: "https://www.googleapis.com/auth/cloud-platform,https://www.googleapis.com/auth/sqlservice.admin"
           token_format: access_token
           access_token_lifetime: 1800s
 
