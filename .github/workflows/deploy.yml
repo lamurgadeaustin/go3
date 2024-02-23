@@ -7,9 +7,10 @@ concurrency:
 
 on:
   push:
-    branches:
-      - main
-      - jeffwecan/first-pass # TODO: just for now... remove later :)
+    branches: [main]
+  # TODO: just for now... remove later :)
+  pull_request:
+    branches: [main]
   workflow_dispatch: {}
 
 jobs:
