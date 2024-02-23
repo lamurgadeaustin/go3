@@ -32,7 +32,7 @@ resource "google_project_service" "murga_o_matic" {
     "run.googleapis.com",
     "compute.googleapis.com", # Needed to edit Cloud SQL config via the console for some reason?
 
-    # "sqladmin.googleapis.com", # for connecting to sql from cloudrun?
+    "sqladmin.googleapis.com", # for connecting to sql from GHA workflow runs?
 
     # "bigquery.googleapis.com",
     # APM and debugging thingers:
