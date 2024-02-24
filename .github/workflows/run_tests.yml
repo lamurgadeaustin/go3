@@ -13,11 +13,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup just
-        uses: taiki-e/install-action@v2
-        with:
-          tool: just
-
       - name: Set up Python
         uses: actions/setup-python@v5
 
