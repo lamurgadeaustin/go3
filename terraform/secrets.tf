@@ -16,26 +16,39 @@ locals {
   )
 }
 
-resource "random_password" "secret_key" {
-  length  = 64
-  special = false
-}
-
-resource "google_secret_manager_secret" "django_settings" {
-  secret_id = "django-settings"
+resource "google_secret_manager_secret" "database_url" {
+  secret_id = "database_url"
 
   replication {
     auto {}
   }
 }
 
-resource "google_secret_manager_secret_version" "django_settings" {
-  secret      = google_secret_manager_secret.django_settings.id
-  secret_data = <<-SECRET
-    DATABASE_URL=${local.website_postgres_connection_url}
-    GS_BUCKET_NAME=${google_storage_bucket.statics.name}
-    SECRET_KEY=${random_password.secret_key.result}
-    SECRET
+resource "google_secret_manager_secret_version" "database_url" {
+  secret      = google_secret_manager_secret.database_url.id
+  secret_data = local.website_postgres_connection_url
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+resource "random_password" "secret_key" {
+  length  = 64
+  special = false
+}
+
+resource "google_secret_manager_secret" "secret_key" {
+  secret_id = "secret_key"
+
+  replication {
+    auto {}
+  }
+}
+
+resource "google_secret_manager_secret_version" "secret_key" {
+  secret      = google_secret_manager_secret.secret_key.id
+  secret_data = random_password.secret_key.result
 
   lifecycle {
     create_before_destroy = true

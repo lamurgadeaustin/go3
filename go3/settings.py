@@ -34,8 +34,8 @@ import environ
 from django.utils.translation import gettext_lazy
 from django.contrib.messages import constants as messages
 from multiprocessing import set_start_method  # for task q
-import google.auth
-from google.cloud import secretmanager
+# import google.auth
+# from google.cloud import secretmanager
 
 env = environ.Env(DEBUG=bool, SENDGRID_SANDBOX_MODE_IN_DEBUG=bool, CAPTCHA_THRESHOLD=float,
                   CALFEED_DYNAMIC_CALFEED=bool, CACHE_USE_FILEBASED=bool, ALLOWED_HOSTS=list,
@@ -62,38 +62,38 @@ env = environ.Env(DEBUG=(bool, True))
 env_file = os.path.join(BASE_DIR, ".env")
 
 # Attempt to load the Project ID into the environment, safely failing on error.
-try:
-    _, os.environ["GOOGLE_CLOUD_PROJECT"] = google.auth.default()
-except google.auth.exceptions.DefaultCredentialsError:
-    pass
+# try:
+#     _, os.environ["GOOGLE_CLOUD_PROJECT"] = google.auth.default()
+# except google.auth.exceptions.DefaultCredentialsError:
+#     pass
 
-if os.path.isfile(env_file):
-    # Use a local secret file, if provided
+# if os.path.isfile(env_file):
+#     # Use a local secret file, if provided
 
-    env.read_env(env_file)
+#     env.read_env(env_file)
 # [START_EXCLUDE]
-elif os.getenv("TRAMPOLINE_CI", None):
-    # Create local settings if running with CI, for unit testing
+# elif os.getenv("TRAMPOLINE_CI", None):
+#     # Create local settings if running with CI, for unit testing
 
-    placeholder = (
-        f"SECRET_KEY=a\n"
-        "GS_BUCKET_NAME=None\n"
-        f"DATABASE_URL=sqlite:////tmp/my-tmp-sqlite.db"
-    )
-    env.read_env(io.StringIO(placeholder))
-# [END_EXCLUDE]
-elif os.environ.get("GOOGLE_CLOUD_PROJECT", None):
-    # Pull secrets from Secret Manager
-    project_id = os.environ.get("GOOGLE_CLOUD_PROJECT")
+#     placeholder = (
+#         f"SECRET_KEY=a\n"
+#         "GS_BUCKET_NAME=None\n"
+#         f"DATABASE_URL=sqlite:////tmp/my-tmp-sqlite.db"
+#     )
+#     env.read_env(io.StringIO(placeholder))
+# # [END_EXCLUDE]
+# elif os.environ.get("GOOGLE_CLOUD_PROJECT", None):
+#     # Pull secrets from Secret Manager
+#     project_id = os.environ.get("GOOGLE_CLOUD_PROJECT")
 
-    client = secretmanager.SecretManagerServiceClient()
-    settings_secret_id = os.environ.get("SETTINGS_SECRET_ID", "django-settings")
-    name = f"projects/{project_id}/secrets/{settings_secret_id}/versions/latest" # TODO: get from an env var as well?
-    payload = client.access_secret_version(name=name).payload.data.decode("UTF-8")
+#     client = secretmanager.SecretManagerServiceClient()
+#     settings_secret_id = os.environ.get("SETTINGS_SECRET_ID", "django-settings")
+#     name = f"projects/{project_id}/secrets/{settings_secret_id}/versions/latest" # TODO: get from an env var as well?
+#     payload = client.access_secret_version(name=name).payload.data.decode("UTF-8")
 
-    env.read_env(io.StringIO(payload))
-else:
-    raise Exception("No local .env or GOOGLE_CLOUD_PROJECT detected. No secrets found.")
+#     env.read_env(io.StringIO(payload))
+# else:
+#     raise Exception("No local .env or GOOGLE_CLOUD_PROJECT detected. No secrets found.")
 # [END cloudrun_django_secret_config]
 
 # SECURITY WARNING: keep the secret key used in production secret!

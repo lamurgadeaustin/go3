@@ -85,12 +85,6 @@ resource "google_service_account_iam_binding" "allow_sa_impersonation" {
   members            = [for u in var.gcp_project_editors : "user:${u}"]
 }
 
-resource "google_secret_manager_secret_iam_policy" "secret_accessor" {
-  project     = google_secret_manager_secret.django_settings.project
-  secret_id   = google_secret_manager_secret.django_settings.id
-  policy_data = data.google_iam_policy.secret_accessor.policy_data
-}
-
 data "google_iam_policy" "secret_accessor" {
   binding {
     role = "roles/secretmanager.secretAccessor"
@@ -99,4 +93,16 @@ data "google_iam_policy" "secret_accessor" {
       # "serviceAccount:${google_service_account.omatic["worker"].email}",
     ]
   }
+}
+
+resource "google_secret_manager_secret_iam_policy" "database_url_access" {
+  project     = google_secret_manager_secret.database_url.project
+  secret_id   = google_secret_manager_secret.database_url.id
+  policy_data = data.google_iam_policy.secret_accessor.policy_data
+}
+
+resource "google_secret_manager_secret_iam_policy" "secret_key_access" {
+  project     = google_secret_manager_secret.secret_key.project
+  secret_id   = google_secret_manager_secret.secret_key.id
+  policy_data = data.google_iam_policy.secret_accessor.policy_data
 }

@@ -62,33 +62,28 @@ resource "google_cloud_run_service" "omatic" {
       containers {
         image = each.value.image
 
-        # env {
-        #   name  = "OMATIC_GCP_SQL_CONNECTION_NAME"
-        #   value = google_sql_database_instance.omatic.connection_name
-        # }
-
-        # env {
-        #   name  = "OMATIC_DB_CONNECTION_NAME"
-        #   value = google_sql_database_instance.omatic.connection_name
-        # }
-
-        # env {
-        #   name  = "OMATIC_DB_USERNAME"
-        #   value = google_sql_user.service_accounts[each.key].name
-        # }
-
-        # env {
-        #   name  = "OMATIC_DB_DATABASE_NAME"
-        #   value = google_sql_database.database.name
-        # }
-
         env {
-          name  = "SETTINGS_SECRET_ID"
-          value = google_secret_manager_secret.django_settings.secret_id
+          name = "SECRET_KEY"
+          value_from {
+            secret_key_ref {
+              name = google_secret_manager_secret.secret_key.name
+              key  = "latest"
+            }
+          }
         }
 
         env {
-          name  = "OMATIC_BASE_URL"
+          name = "DATABASE_URL"
+          value_from {
+            secret_key_ref {
+              name = google_secret_manager_secret.database_url.name
+              key  = "latest"
+            }
+          }
+        }
+
+        env {
+          name  = "CLOUDRUN_SERVICE_URL"
           value = local.cloud_run_domain_name
         }
 
