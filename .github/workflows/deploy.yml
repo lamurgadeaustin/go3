@@ -76,64 +76,64 @@ jobs:
         working-directory: ./terraform
         run: terraform apply -auto-approve
 
-  apply_database_migrations:
-    name: Apple Database Migrations
-    runs-on: ubuntu-latest
-    needs: [deploy_infra_and_services]
-    permissions:
-      contents: "read"
-      id-token: "write"
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+  # apply_database_migrations:
+  #   name: Apple Database Migrations
+  #   runs-on: ubuntu-latest
+  #   needs: [deploy_infra_and_services]
+  #   permissions:
+  #     contents: "read"
+  #     id-token: "write"
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
 
-      - name: Authenticate to Google Cloud
-        uses: google-github-actions/auth@v2
-        with:
-          workload_identity_provider: "${{ vars.WORKLOAD_IDENTITY_PROVIDER }}"
-          service_account: "${{ vars.GHA_SERVICE_ACCOUNT_EMAIL }}"
-          access_token_scopes: "https://www.googleapis.com/auth/cloud-platform,https://www.googleapis.com/auth/sqlservice.admin"
-          token_format: access_token
-          access_token_lifetime: 1800s
+  #     - name: Authenticate to Google Cloud
+  #       uses: google-github-actions/auth@v2
+  #       with:
+  #         workload_identity_provider: "${{ vars.WORKLOAD_IDENTITY_PROVIDER }}"
+  #         service_account: "${{ vars.GHA_SERVICE_ACCOUNT_EMAIL }}"
+  #         access_token_scopes: "https://www.googleapis.com/auth/cloud-platform,https://www.googleapis.com/auth/sqlservice.admin"
+  #         token_format: access_token
+  #         access_token_lifetime: 1800s
 
-      - name: Create Google application creds secret
-        id: google_app_creds
-        run: |
-          creds="$(cat "$GOOGLE_APPLICATION_CREDENTIALS")"
-          echo "::add-mask::$creds"
-          echo "creds=$creds" | tee --append "$GITHUB_OUTPUT"
+  #     - name: Create Google application creds secret
+  #       id: google_app_creds
+  #       run: |
+  #         creds="$(cat "$GOOGLE_APPLICATION_CREDENTIALS")"
+  #         echo "::add-mask::$creds"
+  #         echo "creds=$creds" | tee --append "$GITHUB_OUTPUT"
 
-      - name: Start Google Cloud SQL Proxy
-        uses: mattes/gce-cloudsql-proxy-action@v1
-        with:
-          creds: ${{ steps.google_app_creds.outputs.creds }}
-          # TODO: load instance from TF outputs...
-          instance: murga-o-matic:us-central1:murga-o-matic-629ca117
-          port: "5434"
+  #     - name: Start Google Cloud SQL Proxy
+  #       uses: mattes/gce-cloudsql-proxy-action@v1
+  #       with:
+  #         creds: ${{ steps.google_app_creds.outputs.creds }}
+  #         # TODO: load instance from TF outputs...
+  #         instance: murga-o-matic:us-central1:murga-o-matic-629ca117
+  #         port: "5434"
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+  #     - name: Set up Python
+  #       uses: actions/setup-python@v5
 
-      - name: Install poetry
-        uses: abatilo/actions-poetry@v2
+  #     - name: Install poetry
+  #       uses: abatilo/actions-poetry@v2
 
-      - name: Setup a local virtual environment
-        run: |
-          poetry config virtualenvs.create true --local
-          poetry config virtualenvs.in-project true --local
+  #     - name: Setup a local virtual environment
+  #       run: |
+  #         poetry config virtualenvs.create true --local
+  #         poetry config virtualenvs.in-project true --local
 
-      - uses: actions/cache@v3
-        name: Define a cache for the virtual environment based on the dependencies lock file
-        with:
-          path: ./.venv
-          key: venv-${{ hashFiles('poetry.lock') }}
+  #     - uses: actions/cache@v3
+  #       name: Define a cache for the virtual environment based on the dependencies lock file
+  #       with:
+  #         path: ./.venv
+  #         key: venv-${{ hashFiles('poetry.lock') }}
 
-      - name: Install dependencies
-        run: poetry install --with=prod
+  #     - name: Install dependencies
+  #       run: poetry install --with=prod
 
-      - name: Perform Migrations
-        run: poetry run python manage.py migrate
-        env:
-          DATABASE_URL: "postgres://@localhost/murga-o-matic"
-          GOOGLE_CLOUD_PROJECT: "murga-o-matic"
-          USE_CLOUD_SQL_AUTH_PROXY: "true"
+  #     - name: Perform Migrations
+  #       run: poetry run python manage.py migrate
+  #       env:
+  #         DATABASE_URL: "postgres://@localhost/murga-o-matic"
+  #         GOOGLE_CLOUD_PROJECT: "murga-o-matic"
+  #         USE_CLOUD_SQL_AUTH_PROXY: "true"
