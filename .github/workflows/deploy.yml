@@ -108,7 +108,7 @@ jobs:
         with:
           creds: ${{ steps.google_app_creds.outputs.creds }}
           # TODO: load instance from TF outputs...
-          instance: lv-digital-membership:us-central1:lv-digital-membership-6b6a7153
+          instance: murga-o-matic:us-central1:murga-o-matic-629ca117
           port: "5434"
 
       - name: Set up Python
