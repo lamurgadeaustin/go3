@@ -84,7 +84,7 @@ resource "google_cloud_run_service" "omatic" {
 
         env {
           name  = "CLOUDRUN_SERVICE_URL"
-          value = local.cloud_run_domain_name
+          value = "https://${local.cloud_run_domain_name}"
         }
 
         env {
