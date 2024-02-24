@@ -77,15 +77,15 @@ resource "google_sql_user" "website" {
 #   type     = "BUILT_IN"
 # }
 
-# resource "google_sql_user" "service_accounts" {
-#   for_each = {
-#     website = google_service_account.omatic["website"].email,
-#     # worker  = google_service_account.omatic["worker"].email,
-#   }
-#   name     = replace(each.value, ".gserviceaccount.com", "")
-#   instance = google_sql_database_instance.omatic.name
-#   type     = "CLOUD_IAM_SERVICE_ACCOUNT"
-# }
+resource "google_sql_user" "service_accounts" {
+  for_each = {
+    website = google_service_account.omatic["website"].email,
+    # worker  = google_service_account.omatic["worker"].email,
+  }
+  name     = replace(each.value, ".gserviceaccount.com", "")
+  instance = google_sql_database_instance.omatic.name
+  type     = "CLOUD_IAM_SERVICE_ACCOUNT"
+}
 
 resource "google_sql_user" "users" {
   for_each = toset(var.gcp_project_editors)
