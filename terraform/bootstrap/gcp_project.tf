@@ -25,7 +25,7 @@ resource "google_project_service" "murga_o_matic" {
     "serviceusage.googleapis.com",
 
     "containerregistry.googleapis.com", # hosting cloudrun images
-    "artifactregistry.googleapis.com", # needed for GCR
+    "artifactregistry.googleapis.com",  # needed for GCR
 
     "secretmanager.googleapis.com", # direct usage
 
