@@ -7,7 +7,7 @@ locals {
       ":",
       google_sql_user.website.password,
       "@",
-      "cloudsql/${var.gcp_project_id}:${var.gcp_region}",
+      "//cloudsql/${var.gcp_project_id}:${var.gcp_region}",
       ":",
       google_sql_database_instance.omatic.name,
       "/",
