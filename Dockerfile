@@ -20,7 +20,7 @@ RUN python -m venv /venv
 COPY pyproject.toml poetry.lock ./
 
 RUN /venv/bin/pip install wheel \
-  && poetry export -f requirements.txt \
+  && poetry export -f requirements.txt --with=prod \
     | /venv/bin/pip install -r /dev/stdin
 
 FROM base as final
