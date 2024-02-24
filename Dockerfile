@@ -31,6 +31,8 @@ RUN apk add --no-cache libffi libpq
 
 COPY --from=builder /venv /venv
 
+COPY . .
+
 # COPY docker-entrypoint.sh wsgi.py ./
 COPY docker-entrypoint.sh  ./
 
