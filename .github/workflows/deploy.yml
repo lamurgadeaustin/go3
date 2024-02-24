@@ -97,16 +97,16 @@ jobs:
           access_token_lifetime: 1800s
 
       - name: Create Google application creds secret
-        id: google-app-creds
+        id: google_app_creds
         run: |
-          creds="$(cat '${{ env.GOOGLE_APPLICATION_CREDENTIALS }}')"
+          creds="$(cat "$GOOGLE_APPLICATION_CREDENTIALS")"
           echo "::add-mask::$creds"
           echo "creds=$creds" | tee --append "$GITHUB_OUTPUT"
 
       - name: Start Google Cloud SQL Proxy
         uses: mattes/gce-cloudsql-proxy-action@v1
         with:
-          creds: ${{ steps.google-app-creds.outputs.creds }}
+          creds: ${{ steps.google_app_creds.outputs.creds }}
           # TODO: load instance from TF outputs...
           instance: lv-digital-membership:us-central1:lv-digital-membership-6b6a7153
           port: "5434"
