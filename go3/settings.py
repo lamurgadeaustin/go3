@@ -31,7 +31,7 @@ import logging
 import os
 import sys
 import environ
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext_lazy
 from django.contrib.messages import constants as messages
 from multiprocessing import set_start_method  # for task q
 import google.auth
@@ -206,11 +206,11 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
 LANGUAGES = [
-    ("de", _("German")),
-    ("en-US", _("English (US)")),
-    ("en-GB", _("English (UK)")),
-    ("fr", _("French")),
-    ("it", _("Italian")),
+    ("de", gettext_lazy("German")),
+    ("en-US", gettext_lazy("English (US)")),
+    ("en-GB", gettext_lazy("English (UK)")),
+    ("fr", gettext_lazy("French")),
+    ("it", gettext_lazy("Italian")),
 ]
 
 LANGUAGE_CODE = "en-us"
