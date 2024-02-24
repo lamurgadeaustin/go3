@@ -66,7 +66,7 @@ resource "google_cloud_run_service" "omatic" {
           name = "SECRET_KEY"
           value_from {
             secret_key_ref {
-              name = google_secret_manager_secret.secret_key.name
+              name = google_secret_manager_secret.secret_key.secret_id
               key  = "latest"
             }
           }
@@ -76,7 +76,7 @@ resource "google_cloud_run_service" "omatic" {
           name = "DATABASE_URL"
           value_from {
             secret_key_ref {
-              name = google_secret_manager_secret.database_url.name
+              name = google_secret_manager_secret.database_url.secret_id
               key  = "latest"
             }
           }
