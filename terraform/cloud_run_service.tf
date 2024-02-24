@@ -3,13 +3,13 @@ locals {
 
   cloud_run_services = {
     "website" = {
-      image                   = var.website_image
-      service_account_name    = google_service_account.omatic["website"].email
-      memory_mb               = "512Mi"
-      min_scale               = "1"
-      max_scale               = "1"
-      invokers                = ["allUsers"]
-      timeout_seconds         = 60 * 5 # 5 minutes
+      image                = var.website_image
+      service_account_name = google_service_account.omatic["website"].email
+      memory_mb            = "512Mi"
+      min_scale            = "1"
+      max_scale            = "1"
+      invokers             = ["allUsers"]
+      timeout_seconds      = 60 * 5 # 5 minutes
     }
     # "worker" = {
     #   image                   = var.worker_image
@@ -93,17 +93,12 @@ resource "google_cloud_run_service" "omatic" {
         }
 
         env {
-          name  = "GCLOUD_PROJECT"
-          value = var.gcp_project_id
-        }
-
-        env {
           name  = "LOG_LEVEL"
           value = upper(var.app_log_level)
         }
 
         ports {
-          name = "http1"
+          name           = "http1"
           container_port = "8080"
         }
 

@@ -40,8 +40,8 @@ resource "google_sql_database" "database" {
 }
 
 resource "random_password" "website_sql_user" {
-  length   = 32
-  special  = false
+  length  = 32
+  special = false
 }
 
 resource "google_sql_user" "website" {

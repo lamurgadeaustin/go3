@@ -183,7 +183,6 @@ WSGI_APPLICATION = "go3.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-
 # [START cloudrun_django_database_config]
 # Use django-environ to parse the connection string
 DATABASES = {"default": env.db()}
