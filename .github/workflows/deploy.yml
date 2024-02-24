@@ -133,3 +133,7 @@ jobs:
 
       - name: Perform Migrations
         run: poetry run python manage.py migrate
+        env:
+          DATABASE_URL: "postgres://@localhost/murga-o-matic"
+          GOOGLE_CLOUD_PROJECT: "murga-o-matic"
+          USE_CLOUD_SQL_AUTH_PROXY: "true"
