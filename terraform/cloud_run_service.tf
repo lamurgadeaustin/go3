@@ -83,6 +83,11 @@ resource "google_cloud_run_service" "omatic" {
         # }
 
         env {
+          name  = "SETTINGS_SECRET_ID"
+          value = google_secret_manager_secret.django_settings.secret_id
+        }
+
+        env {
           name  = "OMATIC_BASE_URL"
           value = local.cloud_run_domain_name
         }
