@@ -26,14 +26,16 @@ https://docs.djangoproject.com/en/3.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
-import io
 import logging
 import os
 import sys
-import environ
-from django.utils.translation import gettext_lazy
-from django.contrib.messages import constants as messages
 from multiprocessing import set_start_method  # for task q
+from urllib.parse import urlparse
+
+import environ
+from django.contrib.messages import constants as messages
+from django.utils.translation import gettext_lazy
+
 # import google.auth
 # from google.cloud import secretmanager
 
@@ -110,14 +112,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 # SECURITY WARNING: It's recommended that you use this when
 # running in production. The URL will be known once you first deploy
 # to Cloud Run. This code takes the URL and converts it to both these settings formats.
-# CLOUDRUN_SERVICE_URL = env("CLOUDRUN_SERVICE_URL", default=None)
-# if CLOUDRUN_SERVICE_URL:
-#     ALLOWED_HOSTS = [urlparse(CLOUDRUN_SERVICE_URL).netloc]
-#     CSRF_TRUSTED_ORIGINS = [CLOUDRUN_SERVICE_URL]
-#     SECURE_SSL_REDIRECT = True
-#     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
-# else:
-#     ALLOWED_HOSTS = ["*"]
+CLOUDRUN_SERVICE_URL = env("CLOUDRUN_SERVICE_URL", default=None)
+if CLOUDRUN_SERVICE_URL:
+    ALLOWED_HOSTS = [urlparse(CLOUDRUN_SERVICE_URL).netloc]
+    CSRF_TRUSTED_ORIGINS = [CLOUDRUN_SERVICE_URL]
+    SECURE_SSL_REDIRECT = True
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+else:
+    ALLOWED_HOSTS = ["*"]
 # [END cloudrun_django_csrf]
 
 # Application definition
