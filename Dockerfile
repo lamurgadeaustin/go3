@@ -13,9 +13,9 @@ ENV PIP_DEFAULT_TIMEOUT=100 \
   PIP_NO_CACHE_DIR=1 \
   POETRY_VERSION=1.5.1
 
-RUN apk add --no-cache g++ gcc libffi-dev musl-dev postgresql-dev
-RUN pip install "poetry==$POETRY_VERSION"
-RUN python -m venv /venv
+RUN apk add --no-cache g++ gcc libffi-dev musl-dev postgresql-dev \
+  && pip install "poetry==$POETRY_VERSION" \
+  && python -m venv /venv
 
 COPY pyproject.toml poetry.lock ./
 
