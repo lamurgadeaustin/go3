@@ -19,7 +19,7 @@ output "cloud_sql_instance_name" {
 }
 
 output "database_url_secret_name" {
-  value = google_secret_manager_secret.secret_key.name
+  value = google_secret_manager_secret.database_url.name
 }
 # output "postgres_connection_url" {
 #   value     = local.postgres_connection_url
