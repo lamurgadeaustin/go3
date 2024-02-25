@@ -40,16 +40,6 @@ data "google_iam_policy" "omatic" {
   }
 }
 
-data "google_iam_policy" "omatic_secret_access" {
-  binding {
-    role = "roles/secretmanager.secretAccessor"
-    members = [
-      "serviceAccount:${google_service_account.omatic["website"].email}",
-      # "serviceAccount:${google_service_account.omatic["worker"].email}",
-    ]
-  }
-}
-
 resource "google_project_iam_binding" "omatic_cloudsql_clients" {
   project = var.gcp_project_id
   for_each = toset([
