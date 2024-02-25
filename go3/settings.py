@@ -26,6 +26,7 @@ https://docs.djangoproject.com/en/3.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
+import io
 import logging
 import os
 import sys
@@ -56,6 +57,16 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
+
+if os.getenv("CI", None):
+    # Create local settings if running with CI, for unit testing
+
+    placeholder = (
+        "SECRET_KEY=a\n"
+        "GS_BUCKET_NAME=None\n"
+        "DATABASE_URL=sqlite:////tmp/my-tmp-sqlite.db"
+    )
+    env.read_env(io.StringIO(placeholder))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env('SECRET_KEY', default='123')
