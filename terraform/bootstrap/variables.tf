@@ -13,11 +13,6 @@ variable "gcp_project_name" {
   default = "La Murga gig-o-matic"
 }
 
-variable "gcp_region" {
-  type    = string
-  default = "us-central1"
-}
-
 variable "github_repo" {
   type    = string
   default = "lamurgadeaustin/go3"
