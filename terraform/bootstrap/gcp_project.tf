@@ -1,7 +1,7 @@
-import {
-  to = google_project.murga_o_matic
-  id = "murga-o-matic"
-}
+# import {
+#   to = google_project.murga_o_matic
+#   id = "murga-o-matic"
+# }
 
 resource "google_project" "murga_o_matic" {
   name            = var.gcp_project_name
