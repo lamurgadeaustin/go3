@@ -13,11 +13,6 @@ variable "cloud_run_subdomain" {
   default = "gig-o"
 }
 
-variable "flask_env" {
-  type    = string
-  default = "production"
-}
-
 variable "gcp_project_editors" {
   type = list(string)
   default = [
