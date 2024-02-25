@@ -6,6 +6,7 @@ This project is targeted at Python 3.8.  The required packages can be installed 
 
 ```shellsession
 $ poetry install
+Installing dependencies from lock file
 ```
 
 By default, a SQLite database will be used.  To change this, or other settings, create a file `go/settings_local.py`.  Any settings here will override the defaults.  Note that other databases may need additional packages; `requirements.mysql.txt` has the requirements for MySQL.
@@ -46,6 +47,14 @@ At this point, you should be able to run the project locally:
 
 ```shellsession
 $ poetry run python manage.py runserver
+# ...
+Performing system checks...
+
+System check identified no issues (0 silenced).
+February 25, 2024 - 12:52:11
+Django version 3.2.6, using settings 'go3.settings'
+Starting development server at http://127.0.0.1:8000/
+Quit the server with CONTROL-C.
 ```
 
 You can log in with the user created above.
