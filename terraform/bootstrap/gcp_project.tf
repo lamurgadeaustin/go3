@@ -20,8 +20,6 @@ resource "google_project_service" "murga_o_matic" {
     "iamcredentials.googleapis.com", # IAM Credentials API
     "sts.googleapis.com",
 
-    # Seemingly required for service-account-based applies of this config to avoid this here error:
-    # ... Error when reading or editing Project Service lv-digital-membership/iam.googleapis.com: ...
     "serviceusage.googleapis.com",
 
     "containerregistry.googleapis.com", # hosting cloudrun images
@@ -33,35 +31,6 @@ resource "google_project_service" "murga_o_matic" {
     "compute.googleapis.com", # Needed to edit Cloud SQL config via the console for some reason?
 
     "sqladmin.googleapis.com", # for connecting to sql from GHA workflow runs?
-
-    # "bigquery.googleapis.com",
-    # APM and debugging thingers:
-    # "clouddebugger.googleapis.com",
-    # "cloudtrace.googleapis.com",
-
-    # Building thangs:
-    # "sourcerepo.googleapis.com",
-    # "cloudbuild.googleapis.com",
-
-    # For our sync subscriptions cloud function:
-    # "cloudfunctions.googleapis.com",
-
-    # private IP jazz for cloud sql:
-    # "servicenetworking.googleapis.com",
-
-    # Google Pay Passes API
-    # "walletobjects.googleapis.com",
-
-    # For TF applies by a service account(?):
-    # │ Error: Error when reading or editing App Engine Application "lv-digital-membership":
-    # googleapi: Error 403: App Engine Admin API has not been used in project ...
-    # "appengine.googleapis.com",
-
-    # Email distribution requests / background worker tasks generally
-    # "pubsub.googleapis.com",
-
-    # For scheduled ETL tasks and such
-    # "cloudscheduler.googleapis.com",
   ])
 
   service                    = each.value
