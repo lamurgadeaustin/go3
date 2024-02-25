@@ -7,9 +7,9 @@ resource "google_project_iam_member" "project_editors" {
 
 locals {
   service_account_ids = {
-    "website" = "Digital membership frontend website"
-    # "worker-pubsub-invoker" = "Digital membership pubsub to worker invoker"
-    # "worker"                = "Digital membership background worker"
+    "website" = "gig-o-matic frontend website"
+    # "worker-pubsub-invoker" = "gig-o-matic pubsub to worker invoker"
+    # "worker"                = "gig-o-matic background worker"
   }
 }
 
