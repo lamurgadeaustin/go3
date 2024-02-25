@@ -14,10 +14,13 @@
 #   )
 # }
 
-output "postgres_connection_name" {
+output "cloud_sql_instance_name" {
   value = google_sql_database_instance.omatic.connection_name
 }
 
+output "database_url_secret_name" {
+  value = google_secret_manager_secret.secret_key.name
+}
 # output "postgres_connection_url" {
 #   value     = local.postgres_connection_url
 #   sensitive = true

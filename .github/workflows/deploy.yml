@@ -25,6 +25,9 @@ jobs:
     name: Deploy Infrastructure & Services
     runs-on: ubuntu-latest
     needs: [build_images]
+    outputs:
+      cloud_sql_instance_name: ${{ steps.tf_outputs.outputs.cloud_sql_instance_name }}
+      database_url_secret_name: ${{ steps.tf_outputs.outputs.database_url_secret_name }}
     # environment:
     #   name: production
     #   url: "https://gig-o.murga.app"
