@@ -35,11 +35,11 @@ provider "google-beta" {
 }
 
 
-data "terraform_remote_state" "bootstrap" {
-  backend = "gcs"
+# data "terraform_remote_state" "bootstrap" {
+#   backend = "gcs"
 
-  config = {
-    bucket = "murga-o-matic-tfstate"
-    prefix = "bootstrap"
-  }
-}
+#   config = {
+#     bucket = "murga-o-matic-tfstate"
+#     prefix = "bootstrap"
+#   }
+# }
