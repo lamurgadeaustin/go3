@@ -19,9 +19,9 @@ RUN apk add --no-cache g++ gcc libffi-dev musl-dev postgresql-dev \
 
 COPY pyproject.toml poetry.lock ./
 
-RUN /venv/bin/pip install wheel \
+RUN  bash -c 'set -o pipefail && /venv/bin/pip install wheel \
   && poetry export -f requirements.txt --with=prod \
-    | /venv/bin/pip install -r /dev/stdin
+    | /venv/bin/pip install -r /dev/stdin'
 
 FROM base as final
 
