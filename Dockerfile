@@ -31,7 +31,4 @@ COPY --from=builder /venv /venv
 
 COPY . .
 
-# COPY docker-entrypoint.sh wsgi.py ./
-COPY docker-entrypoint.sh  ./
-
-CMD ["./docker-entrypoint.sh"]
+CMD ["/venv/bin/python", "manage.py", "runserver", "0.0.0.0:$PORT"]
