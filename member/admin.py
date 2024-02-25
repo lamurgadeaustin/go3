@@ -18,37 +18,54 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import UserCreationForm
+
 # from django.contrib.auth.models import User
 from .models import Member, MemberPreferences, Invite
+
 
 class MemberCreateForm(UserCreationForm):
     class Meta:
         model = Member
-        fields = ('email', 'username')
+        fields = ("email", "username")
+
 
 class PreferencesInline(admin.StackedInline):
     model = MemberPreferences
-    classes = ['collapse']
+    classes = ["collapse"]
     verbose_name_plural = "Preferences"
+
 
 class MemberAdmin(BaseUserAdmin):
     # The fields to be used in displaying the User model.
     # These override the definitions on the base UserAdmin
     # that reference specific fields on auth.User.
 
-    list_display = ('email', 'username', 'nickname')
-    list_filter = ('status',)
+    list_display = ("email", "username", "nickname")
+    list_filter = ("status",)
     fieldsets = (
-        (None, {'fields': ('email', 'password')}),
-        ('Personal info', {'fields': ('username','nickname','phone')}),
-        ('Permissions', {
-            'fields': ('is_staff', 'is_superuser', 'groups', 'user_permissions'),
-        }),
-        ('Important dates', {'fields': ('last_login', 'date_joined')}),
-        ('Other stuff', {'classes': ('collapse',),
-                         'fields': ('statement', 'motd_dirty', 'seen_welcome', 
-                                    'images', 'cal_feed_dirty','status'
-                                    )}),
+        (None, {"fields": ("email", "password")}),
+        ("Personal info", {"fields": ("username", "nickname", "phone")}),
+        (
+            "Permissions",
+            {
+                "fields": ("is_staff", "is_superuser", "groups", "user_permissions"),
+            },
+        ),
+        ("Important dates", {"fields": ("last_login", "date_joined")}),
+        (
+            "Other stuff",
+            {
+                "classes": ("collapse",),
+                "fields": (
+                    "statement",
+                    "motd_dirty",
+                    "seen_welcome",
+                    "images",
+                    "cal_feed_dirty",
+                    "status",
+                ),
+            },
+        ),
     )
 
     inlines = [
@@ -64,14 +81,18 @@ class MemberAdmin(BaseUserAdmin):
 
     add_form = MemberCreateForm
     add_fieldsets = (
-        (None, {
-            'classes': ('wide',),
-            'fields': ('email', 'username','password1', 'password2'),
-        }),
+        (
+            None,
+            {
+                "classes": ("wide",),
+                "fields": ("email", "username", "password1", "password2"),
+            },
+        ),
     )
-    search_fields = ('email',)
-    ordering = ('email',)
+    search_fields = ("email",)
+    ordering = ("email",)
     filter_horizontal = ()
+
 
 admin.site.register(Member, MemberAdmin)
 admin.site.register(MemberPreferences)

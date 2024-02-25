@@ -14,16 +14,21 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
+
 from django.contrib import admin
 
 # Register your models here.
 
 from .models import Band, Assoc, Section
 
+
 class BandAdmin(admin.ModelAdmin):
-    readonly_fields = ("creation_date","last_activity",)
+    readonly_fields = (
+        "creation_date",
+        "last_activity",
+    )
+
 
 admin.site.register(Band, BandAdmin)
 admin.site.register(Assoc)
 admin.site.register(Section)
-
